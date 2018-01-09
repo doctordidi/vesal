@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thoughtWorks.dao.SystemDisplayDao">
+
+    <select id="systemInfo" resultType="map" parameterType="Level">
+        select am.*,su.s_whether from (SELECT *
+        FROM v_model
+        <where>
+            <if test="oneLevel != null">
+                AND m_aclassify = #{oneLevel}
+            </if>
+            <if test="secondLevel !=null">
+                AND m_bclassify = #{secondLevel}
+            </if>
+            <if test="threeLevel !=null ">
+                AND m_cclassify = #{threeLevel}
+            </if>
+        </where>
+        ) am LEFT JOIN v_subscribe su on am.m_id = su.model_id
+        <if test="customId !=''">
+            and su.custom_id = #{customId}
+        </if>
+    </select>
+    <select id="modelMenuAClassify" resultType="map">
+        select * from v_aclassify
+    </select>
+    <select id="modelMenuBClassify" resultType="map" parameterType="int">
+       select bc.b_id,bc.b_name from v_bclassify bc where b_aid = #{b_aid}
+    </select>
+    <select id="modelMenuCClassify" resultType="map" parameterType="int">
+      select cc.c_id,cc.c_name from v_cclassify cc where c_bid = #{c_bid}
+    </select>
+    <select id="queryModelById" resultType="map" parameterType="Level">
+        select distinct am.*,su.s_whether,co.* from (select count(*) count from v_subscribe where model_id = #{modelId})
+        co, (SELECT *
+        FROM v_model where m_id =#{modelId}) am
+        LEFT JOIN v_subscribe su on am.m_id = su.model_id
+        <if test="customId !=''">
+            and su.custom_id = #{customId}
+        </if>
+    </select>
+</mapper>

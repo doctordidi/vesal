@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thoughtWorks.dao.GroupUsersDao">
+
+    <insert id="addAccount" parameterType="list">
+        insert into v_custom (c_name, c_password,adminName,groupUserPrefix,parentAccount,c_phone,c_email)
+        values
+        <foreach collection="userInfo" item="item" index="index" separator=",">
+            (#{item.name},#{item.pwd},#{item.adminName},#{item.groupUserPrefix},#{item.parentAccount},#{item.cPhone},#{item.cEmail})
+        </foreach>
+    </insert>
+
+    <select id="selectAccount" parameterType="map" resultType="map">
+        select c_id,c_name,parentAccount,c_phone,c_email from v_custom
+        WHERE adminName = #{data.adminName}
+        ORDER BY c_id DESC
+        LIMIT #{data.start},#{data.size}
+    </select>
+
+    <select id="selectAccountTotalSize" parameterType="string" resultType="long">
+        select COUNT(1) from v_custom
+        WHERE adminName = #{userName}
+    </select>
+
+    <select id="checkPrefix" parameterType="map" resultType="int">
+        select count(1) from v_custom
+        WHERE groupUserPrefix = #{checkInfo.prefix}
+    </select>
+
+    <delete id="deleteAccount" parameterType="int">
+        DELETE FROM v_custom
+        WHERE v_custom.c_id = #{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,60 @@
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0
+}
+
+body {
+    font-family: "helvetica neue", arial, sans-serif;
+    font-size: 14px;
+    color: #444;
+    overflow-x: hidden
+}
+
+h2 {
+    padding: 0 0 8px;
+    font-size: 21px
+}
+
+h1, h2 {
+    letter-spacing: -.0125em;
+    font-weight: 700
+}
+
+p {
+    margin: 0 0 .8em;
+    line-height: 1.35em
+}
+
+a {
+    color: #222;
+    text-decoration: none;
+    outline: 0
+}
+
+.clearfix:before, .clearfix:after {
+    content: "";
+    display: table
+}
+
+.clearfix:after {
+    clear: both
+}
+
+.clearfix {
+    *zoom: 1
+}
+
+.clear {
+    clear: both
+}
+
+.wrapper {
+    position: relative;
+    margin: 0 auto;
+    border: 0
+}
+
+.wrapper-996 {
+    width: 996px
+}

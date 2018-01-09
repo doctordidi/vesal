@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thoughtWorks.dao.CustomDao">
+
+    <select id="login" resultType="Custom" parameterType="Custom">
+        select * from v_custom where (c_name = #{cName} or c_phone = #{cName}  or c_email = #{cName}) AND c_password = #{cPassword}
+    </select>
+    <insert id="addSubscribe" parameterType="Subscribe">
+        insert into v_subscribe(custom_id, model_id, s_whether) VALUES (#{customId},#{modelId},#{sWhether})
+    </insert>
+    <delete id="deleteSubscribe" parameterType="Subscribe">
+        DELETE  from v_subscribe where custom_id =#{customId} and model_id =#{modelId}
+    </delete>
+    <select id="personalSubscription" resultType="map" parameterType="Custom">
+        select v_model.* from v_model,(select model_id from v_subscribe where custom_id = #{cId}) sub where sub.model_id = v_model.m_id
+    </select>
+    <select id="queryCustomByName" resultType="Custom" parameterType="string">
+          select * from v_custom where c_name = #{cName}
+    </select>
+    <insert id="customRegister" parameterType="com.thoughtWorks.entity.Custom">
+        insert into
+        v_custom (c_name, c_password, c_code, c_occupation, c_phone, c_email, c_city,c_ip)
+        values (#{custom.cName},#{custom.cPassword},#{custom.cCode},#{custom.cOccupation},#{custom.cPhone},#{custom.cEmail},#{custom.cCity},#{custom.cIp});
+    </insert>
+
+    <select id="checkPhone" parameterType="string" resultType="int">
+        select COUNT(1) from v_custom
+        WHERE c_phone = #{cPhone}
+    </select>
+
+    <select id="checkEmail" parameterType="string" resultType="int">
+        select COUNT(1) from v_custom
+        WHERE c_email = #{cEmail}
+    </select>
+</mapper>

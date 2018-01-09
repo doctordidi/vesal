@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thoughtWorks.dao.UploadDao">
+
+    <insert id="addZipInfo" parameterType="map">
+        insert into v_model
+        (m_code, m_name, m_price, m_introduce, m_thumbnail, m_dynamic, m_unity, m_file,m_version,m_xmlpath,m_aclassify,m_bclassify,m_cclassify)
+        values
+        (#{zipFile.code},#{zipFile.name},#{zipFile.price},#{zipFile.introduce},#{zipFile.imgStr},
+        #{zipFile.gifStr},#{zipFile.gifStr},#{zipFile.gifStr},"1",
+        #{zipFile.xml},#{zipFile.oneId},#{zipFile.twoId},#{zipFile.thrId});
+    </insert>
+
+    <select id="getModelGrade" parameterType="map" resultType="map">
+        select
+        aclassify.a_id,
+        bclassify.b_id,
+        cclassify.c_id
+        from v_cclassify cclassify
+        INNER JOIN (select * from v_bclassify) bclassify ON cclassify.c_bid = bclassify.b_id
+        INNER JOIN (select * from v_aclassify) aclassify ON bclassify.b_aid = aclassify.a_id
+        WHERE cclassify.c_name = #{data.count2}
+--         (select * from v_aclassify WHERE v_aclassify.a_name = #{data.count0}) aclassify,
+--         (select * from v_bclassify WHERE v_bclassify.b_name = #{data.count1}) bclassify,
+--         (select * from v_cclassify WHERE v_cclassify.c_name = #{data.count2}) cclassify;
+    </select>
+
+    <select id="getModelGradeOne" parameterType="String" resultType="String">
+        select a_id from v_aclassify WHERE v_aclassify.a_name = #{count0};
+    </select>
+
+    <select id="getModelGradeTwo" parameterType="String" resultType="String">
+        select b_id from v_bclassify WHERE v_bclassify.b_name = #{count1};
+    </select>
+
+    <select id="getModelGradeThr" parameterType="String" resultType="String">
+        select c_id from v_cclassify WHERE v_cclassify.c_name = #{count2};
+    </select>
+
+</mapper>

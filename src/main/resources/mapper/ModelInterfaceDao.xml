@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thoughtWorks.dao.ModelInterfaceDao">
+
+    <select id="aClassify" resultType="map" parameterType="Classify">
+          select"" id, b_name name,0 type ,"" img,"" version from v_bclassify ,(select a_id from v_aclassify where a_name =#{aclassify}) a
+          where a.a_id = v_bclassify.b_aid
+          UNION
+          SELECT m_code id, m_name name,1 type,m_thumbnail img,m_version version FROM v_model model,(select a_id from v_aclassify where a_name =#{aclassify}) b
+            WHERE  m_aclassify = b.a_id AND  m_bclassify IS NULL AND  m_cclassify IS NULL
+    </select>
+    <select id="bClassify" resultType="map" parameterType="Classify">
+    select "" id, c_name name,0 type ,"" img,"" version FROM v_cclassify,(select b_id,b_name from v_bclassify ,
+    (select a_id from v_aclassify where a_name = #{aclassify}) a
+    where a.a_id = v_bclassify.b_aid and b_name = #{bclassify}) b
+    where b.b_id = v_cclassify.c_bid
+    UNION
+    select m_code id, m_name name,1 type,m_thumbnail img,m_version version from v_model model,
+    (select a_id from v_aclassify where a_name = #{aclassify}) ac,
+    (select b_id,b_name from v_bclassify where  b_name = #{bclassify}) bc
+    WHERE  m_aclassify = ac.a_id AND  m_bclassify =  bc.b_id AND  m_cclassify IS NULL
+    </select>
+    <select id="modelAll" resultType="map" parameterType="Classify">
+       select m_code id, m_name name,1 type,m_thumbnail img,m_version version from v_model
+        ,(select a_id from v_aclassify where a_name = #{aclassify}) ac
+        ,(select b_id from v_bclassify where b_name = #{bclassify}) bc
+        ,(select c_id from v_cclassify where c_name = #{cclassify}) cc
+      where ac.a_id = m_aclassify and bc.b_id = m_bclassify and cc.c_id = m_cclassify
+    </select>
+</mapper>
